@@ -1,0 +1,22 @@
+---
+# For use with packer and ansible-local provisioner.
+- hosts: all
+  connection: local
+  sudo: yes
+  roles:
+    - java
+    - jenkins
+    - python3
+  vars:
+    python3_pip_packages:
+      - boto
+      - awscli
+    jenkins_plugins:
+      - ec2
+      - parameterized-trigger
+      - google-login
+      - job-dsl
+      - github
+      - groovy
+      - hipchat
+      - build-blocker
