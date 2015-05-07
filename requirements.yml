@@ -1,6 +1,6 @@
 # role dependencies
 ---
-- src: git+git@github.com:ridecharge/jenkins-ansible-role.git
+- src: git+git@github.com:ridecharge/curbkins-ansible-role.git
   path: roles
   name: jenkins
 - src: git+git@github.com:ridecharge/java-ansible-role.git
