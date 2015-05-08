@@ -3,6 +3,7 @@ package io.gocurb.curbkins.config
 import jenkins.model.JenkinsLocationConfiguration
 
 /**
+ * Configures the instances sysadmin email address
  * Created by sgarlick on 5/8/15.
  */
 class InstanceAdmin implements InstanceConfig {

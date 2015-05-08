@@ -1,19 +1,31 @@
 package io.gocurb.curbkins.config
 
+import hudson.plugins.git.GitSCM
 import jenkins.model.Jenkins
 
 /**
+ * Configures the jenkins git user
  * Created by sgarlick on 5/8/15.
  */
 class InstanceGit implements InstanceConfig {
     Jenkins instance
-    def configure() {
-        def desc = instance.getDescriptor("hudson.plugins.git.GitSCM")
-        def globalConfigName = ['curl', 'consul:8500/v1/kv/jenkins/config/GITHUB_OAUTH2_TOKEN?raw'].execute().text
-        def globalConfigEmail = ['curl', 'consul:8500/v1/kv/jenkins/config/GITHUB_OAUTH2_TOKEN?raw'].execute().text
+    String globalConfigName
+    String globalConfigEmail
 
+    def configure() {
+        System.println(instance)
+        def desc = instance.getDescriptorByType(GitSCM.DescriptorImpl.class)
+        System.println(desc)
         desc.setGlobalConfigName(globalConfigName)
         desc.setGlobalConfigEmail(globalConfigEmail)
         desc.save()
+    }
+
+    static def getGlobalConfigName() {
+        return ['curl', 'consul:8500/v1/kv/jenkins/config/GIT_COMMIT_NAME?raw'].execute().text
+    }
+
+    static def getGlobalConfigEmail() {
+        return ['curl', 'consul:8500/v1/kv/jenkins/config/GIT_COMMIT_EMAIL?raw'].execute().text
     }
 }

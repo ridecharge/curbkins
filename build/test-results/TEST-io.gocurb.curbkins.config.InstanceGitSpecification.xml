@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.gocurb.curbkins.config.InstanceGitSpecification" tests="1" skipped="0" failures="1" errors="0" timestamp="2015-05-08T20:32:22" hostname="TaxiMagaseImage.fios-router.home" time="0.385">
+  <properties/>
+  <testcase name="instance gets the GitSCM descriptor" classname="io.gocurb.curbkins.config.InstanceGitSpecification" time="0.385">
+    <failure message="java.lang.NullPointerException" type="java.lang.NullPointerException">java.lang.NullPointerException
+	at hudson.model.Descriptor.getConfigFile(Descriptor.java:790)
+	at hudson.model.Descriptor.save(Descriptor.java:762)
+	at org.spockframework.mock.runtime.GroovyMockMetaClass.doInvokeMethod(GroovyMockMetaClass.java:81)
+	at org.spockframework.mock.runtime.GroovyMockMetaClass.invokeMethod(GroovyMockMetaClass.java:40)
+	at io.gocurb.curbkins.config.InstanceGit.configure(InstanceGit.groovy:21)
+	at io.gocurb.curbkins.config.InstanceGitSpecification.instance gets the GitSCM descriptor(InstanceGitSpecification.groovy:27)
+</failure>
+  </testcase>
+  <system-out><![CDATA[hudson.plugins.git.GitSCM$DescriptorImpl@832d965
+Mock for type 'Jenkins' named 'instance'
+hudson.plugins.git.GitSCM$DescriptorImpl@832d965
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

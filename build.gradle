@@ -17,6 +17,14 @@ dependencies {
     providedCompile 'org.jenkins-ci.plugins:ssh-credentials:1.11@jar'
     providedCompile 'com.coravy.hudson.plugins.github:github:1.11.3@jar'
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    providedCompile 'org.jenkins-ci.plugins:git:2.3.5@jar'
+    providedCompile 'org.kohsuke:github-api:1.68'
+    providedCompile 'org.jenkins-ci.plugins:git-client:1.17.0@jar'
+    providedCompile 'org.jenkins-ci.modules:instance-identity:1.4'
+    providedCompile 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r'
     testCompile 'org.spockframework:spock-core:0.7-groovy-1.8'
+    testCompile 'org.objenesis:objenesis:2.1'
+    testCompile 'cglib:cglib:3.1'
+
 
 }

@@ -1,6 +1,7 @@
 package io.gocurb.curbkins.config
 
 import com.cloudbees.jenkins.Credential
+import com.cloudbees.jenkins.GitHubPushTrigger
 import jenkins.model.Jenkins
 
 /**
@@ -12,7 +13,7 @@ class InstanceGithub implements InstanceConfig{
         def oauthUser = ['curl', 'consul:8500/v1/kv/jenkins/config/GITHUB_OAUTH2_USER?raw'].execute().text
         def oauthToken = ['curl', 'consul:8500/v1/kv/jenkins/config/GITHUB_OAUTH2_TOKEN?raw'].execute().text
 
-        def push = instance.getDescriptor("com.cloudbees.jenkins.GitHubPushTrigger")
+        def push = instance.getDescriptorByType(GitHubPushTrigger.class)
 
         push.setManageHook(true)
         def creds = push.getCredentials()
