@@ -2,10 +2,4 @@
 ---
 - src: git+git@github.com:ridecharge/curbkins-ansible-role.git
   path: roles
-  name: jenkins
-- src: git+git@github.com:ridecharge/java-ansible-role.git
-  path: roles
-  name: java
-- src: git+git@github.com:ridecharge/python3-ansible-role.git
-  path: roles
-  name: python3
+  name: curbkins

@@ -1,9 +1,8 @@
-FROM registry.gocurb.internal:80/ansible
+FROM registry.gocurb.internal:80/jenkins
 
-COPY jenkins-wrapper.sh /tmp/jenkins-wrapper.sh
-RUN chmod 0500 /tmp/jenkins-wrapper.sh
+COPY jenkins-wrapper.sh /tmp/curbkins-wrapper.sh
+RUN chmod 0500 /tmp/curbkins-wrapper.sh
 
 VOLUME ["/var/run/docker.socket"]
-
 EXPOSE 8080
-ENTRYPOINT ["/tmp/jenkins-wrapper.sh"]
+ENTRYPOINT ["/tmp/curbkins-wrapper.sh"]
