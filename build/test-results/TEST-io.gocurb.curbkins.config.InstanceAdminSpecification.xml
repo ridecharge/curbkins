@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="io.gocurb.curbkins.config.InstanceAdminSpecification" tests="1" skipped="0" failures="0" errors="0" timestamp="2015-05-08T20:33:00" hostname="TaxiMagaseImage.fios-router.home" time="0.164">
-  <properties/>
-  <testcase name="the admin email address is saved" classname="io.gocurb.curbkins.config.InstanceAdminSpecification" time="0.164"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
