@@ -1,5 +1,22 @@
 apply plugin: 'groovy'
+apply plugin: 'war'
 
 repositories {
     jcenter()
+    maven {
+        url 'http://repo.jenkins-ci.org/public/'
+    }
+}
+dependencies {
+    providedCompile 'org.codehaus.groovy:groovy-all:1.8.9'
+    providedCompile 'org.jenkins-ci.main:jenkins-core:1.612'
+    providedCompile 'org.jvnet.hudson.plugins:hipchat:0.1.9@jar'
+    providedCompile 'org.jenkins-ci.plugins:google-login:1.1@jar'
+    providedCompile 'org.jenkins-ci.plugins:matrix-auth:1.2@jar'
+    providedCompile 'org.jenkins-ci.plugins:credentials:1.22@jar'
+    providedCompile 'org.jenkins-ci.plugins:ssh-credentials:1.11@jar'
+    providedCompile 'com.coravy.hudson.plugins.github:github:1.11.3@jar'
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    testCompile 'org.spockframework:spock-core:0.7-groovy-1.8'
+
 }
