@@ -1,6 +1,6 @@
 FROM registry.gocurb.internal:80/jenkins
 
-COPY jenkins-wrapper.sh /tmp/curbkins-wrapper.sh
+COPY curbkins-wrapper.sh /tmp/curbkins-wrapper.sh
 RUN chmod 0500 /tmp/curbkins-wrapper.sh
 
 VOLUME ["/var/run/docker.socket"]
