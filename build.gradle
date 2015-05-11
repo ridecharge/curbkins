@@ -1,5 +1,10 @@
 apply plugin: 'groovy'
-apply plugin: 'war'
+
+configurations { providedCompile }
+
+sourceSets.main.compileClasspath += configurations.providedCompile
+sourceSets.test.compileClasspath += configurations.providedCompile
+sourceSets.test.runtimeClasspath += configurations.providedCompile
 
 repositories {
     jcenter()

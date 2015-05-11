@@ -13,7 +13,7 @@ class InstanceSshCredentials implements InstanceConfig {
         def creds = systemCredentialsProvider.getCredentials()
         if(creds.size() == 0) {
             def keySource = new BasicSSHUserPrivateKey.UsersPrivateKeySource()
-            def cred = new BasicSSHUserPrivateKey(CredentialsScope.GLOBAL, 'curbkins-github', 'curbkins-github',keySource, '', '')
+            def cred = new BasicSSHUserPrivateKey(CredentialsScope.GLOBAL, 'curbkins-github', 'curbkins-github', keySource, '', '')
             creds.add(cred)
         }
         systemCredentialsProvider.save()

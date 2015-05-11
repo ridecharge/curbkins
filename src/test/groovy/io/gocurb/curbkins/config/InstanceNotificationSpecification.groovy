@@ -44,4 +44,12 @@ class InstanceNotificationSpecification extends Specification {
         then:
         descriptor.setRoom(notificationRoom)
     }
+
+    def "the configuration is saved"() {
+        when:
+        instanceNotification.configure()
+
+        then:
+        descriptor.save()
+    }
 }
