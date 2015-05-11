@@ -13,7 +13,6 @@ class InstanceGit implements InstanceConfig {
     String globalConfigEmail
 
     def configure() {
-        System.println(instance)
         def desc = instance.getDescriptorByType(GitSCM.DescriptorImpl.class)
         System.println(desc)
         desc.setGlobalConfigName(globalConfigName)

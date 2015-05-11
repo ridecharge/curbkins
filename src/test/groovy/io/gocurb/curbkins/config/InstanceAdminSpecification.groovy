@@ -12,8 +12,8 @@ class InstanceAdminSpecification extends Specification {
     InstanceAdmin instanceAdmin
     def setup() {
         adminEmailAddress = "sysadmin@gocurb.com"
-        jenkinsLocationConfiguration = Mock(JenkinsLocationConfiguration)
-        instanceAdmin = new InstanceAdmin(adminEmailAddress:adminEmailAddress,
+        jenkinsLocationConfiguration = Mock()
+        instanceAdmin = new InstanceAdmin(adminEmailAddress: adminEmailAddress,
                                           jenkinsLocationConfiguration: jenkinsLocationConfiguration)
 
     }
@@ -23,6 +23,7 @@ class InstanceAdminSpecification extends Specification {
         instanceAdmin.configure()
 
         then:
+        jenkinsLocationConfiguration.setAdminAddress(adminEmailAddress)
         jenkinsLocationConfiguration.save()
     }
 }
