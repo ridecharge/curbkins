@@ -31,8 +31,9 @@ class InstanceConfigJobs implements InstanceConfig {
                     }
                 }
                 steps {
+                    println(entry.value.class.name)
                     systemGroovyCommand(
-                            "${entry.getValue().getClass().getName()}.get().configure()") {
+                            "${entry.value.class.name}.get().configure()") {
                         classpath('build/libs/*')
                     }
                 }
