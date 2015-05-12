@@ -45,15 +45,17 @@ class InstanceConfigJobs {
                         classpath('$WORKSPACE/build/libs/curbkins.jar')
                     }
                 }
-                configure { project ->
-                    project / 'publishers' << HipChatNotifier {
-                        startNotification true
-                        notifyAborted true
-                        notifyFailure true
-                        notifyNotBuilt true
-                        notifySuccess true
-                        notifyUnstable true
-                        notifyBackToNormal true
+                publishers {
+                    configure { project ->
+                        project / 'publishers' << HipChatNotifier {
+                            startNotification true
+                            notifyAborted true
+                            notifyFailure true
+                            notifyNotBuilt true
+                            notifySuccess true
+                            notifyUnstable true
+                            notifyBackToNormal true
+                        }
                     }
                 }
             })
