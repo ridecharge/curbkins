@@ -34,7 +34,6 @@ class InstanceGithub implements InstanceConfig {
     }
 
     static def getOauthToken() {
-        return ['curl', 'consul:8500/v1/kv/jenkins/config/GITHUB_OAUTH2_TOKEN?raw'].execute().text.
-                execute().text
+        return ['curl', 'consul:8500/v1/kv/jenkins/config/GITHUB_OAUTH2_TOKEN?raw'].execute().text
     }
 }
