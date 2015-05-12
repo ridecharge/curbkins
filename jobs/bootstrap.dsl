@@ -1,6 +1,6 @@
 import javaposse.jobdsl.dsl.DslFactory
 def dslFactory = this as DslFactory
-dslFactory.job('boostrap') {
+dslFactory.job('bootstrap') {
     scm {
         git {
             remote {
