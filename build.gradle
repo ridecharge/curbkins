@@ -23,6 +23,7 @@ repositories {
         url 'http://repo.jenkins-ci.org/public/'
     }
 }
+
 dependencies {
     providedCompile 'org.codehaus.groovy:groovy-all:1.8.9'
     providedCompile 'org.jenkins-ci.main:jenkins-core:1.612'
@@ -45,7 +46,6 @@ dependencies {
         exclude module: 'groovy-all'
     }
 }
-
 
 task workspace(type: Copy) {
     from fileTree(dir: 'jobs')

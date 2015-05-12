@@ -1,11 +1,10 @@
-package io.gocurb.curbkins.config
-
+package io.gocurb.curbkins.jobs
+import io.gocurb.curbkins.config.*
 import javaposse.jobdsl.dsl.DslFactory
-
 /**
  * Created by sgarlick on 5/11/15.
  */
-class InstanceConfigJobs implements InstanceConfig {
+class InstanceConfigJobs implements InstanceJobs {
 
     static Map<String, String> configJobs = [
             'jenkins-security-config'      : InstanceSecurity.name,
@@ -16,6 +15,11 @@ class InstanceConfigJobs implements InstanceConfig {
             'jenkins-admin-config'         : InstanceAdmin.name,
 
     ]
+
+    def getDownstreams() {
+        return configJobs.keySet()
+    }
+
     DslFactory dslFactory
 
     def configure() {
