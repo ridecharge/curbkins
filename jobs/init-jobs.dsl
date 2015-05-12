@@ -1,5 +1,4 @@
-import io.gocurb.curbkins.jobs.InstanceConfigJobs
-import io.gocurb.curbkins.jobs.InstanceJobs
+import groovy.io.FileType
 import javaposse.jobdsl.dsl.DslFactory
 
 def workSpace
@@ -12,12 +11,20 @@ catch (Exception) {
     workSpace = ""
 }
 
-def Map<String, Class<InstanceJobs>> configs = ['generate-config-jobs.dsl': InstanceConfigJobs]
-def jobNames = configs.keySet()
+def Map<String, String> jobScripts = [:]
+new File("${workSpace}jobs").eachFileRecurse(FileType.FILES) { file ->
+    def jobName = file.path.split('/')[-1].split("\\.")[0]
+    if (['init-jobs', 'bootstrap'].contains(jobName)) {
+        jobScripts[jobName] = "jobs/${jobName}.dsl"
+    }
+}
+
 def dslFactory = this as DslFactory
-for (jobName in jobNames) {
-    def jobPath = "jobs/${jobName}"
+for (jobScript in jobScripts.entrySet()) {
+    def jobName = jobScript.key
+    def jobPath = jobScript.value
     dslFactory.job(jobName) {
+        blockOnUpstreamProjects()
         scm {
             git {
                 remote {
@@ -27,7 +34,7 @@ for (jobName in jobNames) {
             }
         }
         triggers {
-            githubPush()
+            upstream('init-jobs')
         }
         steps {
             gradle {
@@ -37,9 +44,6 @@ for (jobName in jobNames) {
                 additionalClasspath('build/libs/curbkins.jar')
                 external(jobPath)
             }
-        }
-        publishers {
-            downstream("")
         }
     }
 }

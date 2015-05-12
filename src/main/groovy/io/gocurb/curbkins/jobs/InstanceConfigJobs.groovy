@@ -4,7 +4,7 @@ import javaposse.jobdsl.dsl.DslFactory
 /**
  * Created by sgarlick on 5/11/15.
  */
-class InstanceConfigJobs implements InstanceJobs {
+class InstanceConfigJobs {
 
     static Map<String, String> configJobs = [
             'jenkins-security-config'      : InstanceSecurity.name,
@@ -15,11 +15,6 @@ class InstanceConfigJobs implements InstanceJobs {
             'jenkins-admin-config'         : InstanceAdmin.name,
 
     ]
-
-    def getDownstreams() {
-        return configJobs.keySet()
-    }
-
     DslFactory dslFactory
 
     def configure() {
