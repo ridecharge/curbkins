@@ -22,10 +22,18 @@ class InstanceConfigJobs implements InstanceConfig {
         def jobs = []
         for (entry in configJobs.entrySet()) {
             jobs.add(dslFactory.job(entry.getKey()) {
+                scm {
+                    git {
+                        remote {
+                            github('ridecharge/curbkins', 'https')
+                            branch('master')
+                        }
+                    }
+                }
                 steps {
                     systemGroovyCommand(
                             "${entry.getValue().getClass().getName()}.get().configure()") {
-                        classpath('/opt/jenkins/lib/curbkins.jar')
+                        classpath('build/libs/*')
                     }
                 }
             })
