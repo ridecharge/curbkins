@@ -39,7 +39,7 @@ for (jobScript in jobScripts.entrySet()) {
                 tasks('build')
             }
             dsl {
-                additionalClasspath('build/libs/*')
+                additionalClasspath('build/libs/curbkins.jar')
                 external(jobScript.value)
             }
         }

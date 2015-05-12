@@ -36,7 +36,7 @@ class InstanceConfigJobs implements InstanceConfig {
                     }
                     systemGroovyCommand(
                             "${entry.value}.get().configure()") {
-                        classpath('build/libs/*')
+                        classpath('$WORKSPACE/build/libs/curbkins.jar')
                     }
                 }
             })
