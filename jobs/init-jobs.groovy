@@ -19,7 +19,7 @@ dslFactory.job('init-jobs') {
             tasks('build')
         }
         dsl {
-            additionalClasspath('build/libs')
+            additionalClasspath('build/libs/*')
             text(readFileFromWorkspace('jobs/generate-config-jobs.groovy'))
         }
     }

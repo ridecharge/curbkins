@@ -3,9 +3,4 @@ import javaposse.jobdsl.dsl.DslFactory
 
 def dslFactory = this as DslFactory
 
-dslFactory.job('generate-config-jobs') {
-    for(jobEntry in InstanceConfigJobs.configJobs) {
-
-    }
-}
-jobs = InstanceConfigJobs.get(dslFactory).configure()
+jobs =  new InstanceConfigJobs(dslFactory: dslFactory).configure()
