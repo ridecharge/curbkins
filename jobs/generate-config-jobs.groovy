@@ -1,1 +1,5 @@
-io.gocurb.curbkins.config.InstanceConfigJobs.get(this as javaposse.jobdsl.dsl.DslFactory).configure()
+import io.gocurb.curbkins.config.InstanceConfigJobs
+import javaposse.jobdsl.dsl.DslFactory
+
+def dslFactory = this as DslFactory
+jobs = InstanceConfigJobs.get(dslFactory).configure()
