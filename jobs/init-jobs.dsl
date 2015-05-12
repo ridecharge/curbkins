@@ -19,6 +19,8 @@ new File("${workSpace}jobs").eachFileRecurse(FileType.FILES) { file ->
     }
 }
 
+def blockOns = ['generate-build-jobs': 'generate-config-jobs']
+
 def dslFactory = this as DslFactory
 for (jobScript in jobScripts.entrySet()) {
     def jobName = jobScript.key
@@ -32,6 +34,9 @@ for (jobScript in jobScripts.entrySet()) {
                     branch('master')
                 }
             }
+        }
+        if(blockOns[jobName]?.trim()) {
+            blockOn(blockOns[jobName])
         }
         triggers {
             upstream('init-jobs')

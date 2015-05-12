@@ -28,7 +28,6 @@ for(j in jobs) {
     def cmd = config['cmd']
 
     dslFactory.job(jobName) {
-        blockOn('generate-config-jobs')
         logRotator(10, 10)
 
         if(repo) {
