@@ -16,9 +16,8 @@ catch (Exception) {
 
 new File("${workSpace}jobs").eachFileRecurse(FileType.FILES) { file ->
     def jobName = file.path.split('/')[-1].split("\\.")[0]
-    print(jobName)
     if (jobName != 'init-jobs') {
-        jobScripts[jobName] = file.path
+        jobScripts[jobName] = "jobs/${jobName}.groovy"
     }
 }
 
