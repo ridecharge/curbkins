@@ -22,7 +22,7 @@ class InstanceSshCredentials implements InstanceConfig {
 
     static def get() {
         return new InstanceSshCredentials(systemCredentialsProvider: SystemCredentialsProvider.getInstance(),
-                                          credential: getCurbkinsGithubCredentials()
+                                          credentials: getCurbkinsGithubCredentials()
         )
     }
 
