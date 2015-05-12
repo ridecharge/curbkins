@@ -7,13 +7,13 @@ import javaposse.jobdsl.dsl.DslFactory
  */
 class InstanceConfigJobs implements InstanceConfig {
 
-    static Map<String, InstanceConfig> configJobs = [
-            'jenkins-security-config'      : InstanceSecurity,
-            'jenkins-git-config'           : InstanceGit,
-            'jenkins-jenkins-github-config': InstanceGithub,
-            'hipchat-config'               : InstanceNotifications,
-            'jenkins-ssh-config'           : InstanceSshCredentials,
-            'jenkins-admin-config'         : InstanceAdmin,
+    static Map<String, String> configJobs = [
+            'jenkins-security-config'      : InstanceSecurity.name,
+            'jenkins-git-config'           : InstanceGit.name,
+            'jenkins-jenkins-github-config': InstanceGithub.name,
+            'jenkins-hipchat-config'       : InstanceNotifications.name,
+            'jenkins-ssh-config'           : InstanceSshCredentials.name,
+            'jenkins-admin-config'         : InstanceAdmin.name,
 
     ]
     DslFactory dslFactory
@@ -31,9 +31,9 @@ class InstanceConfigJobs implements InstanceConfig {
                     }
                 }
                 steps {
-                    println(entry.value.class.name)
+                    println(entry.value)
                     systemGroovyCommand(
-                            "${entry.value.class.name}.get().configure()") {
+                            "${entry.value}.get().configure()") {
                         classpath('build/libs/*')
                     }
                 }
