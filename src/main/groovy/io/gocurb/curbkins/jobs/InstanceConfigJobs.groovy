@@ -21,6 +21,10 @@ class InstanceConfigJobs {
         def jobs = []
         for (entry in configJobs.entrySet()) {
             jobs.add(dslFactory.job(entry.getKey()) {
+                blockOnUpstreamProjects()
+                triggers {
+                    upstream('generate-config-jobs')
+                }
                 scm {
                     git {
                         remote {
