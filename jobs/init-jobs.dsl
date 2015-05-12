@@ -14,7 +14,7 @@ catch (Exception) {
 def Map<String, String> jobScripts = [:]
 new File("${workSpace}jobs").eachFileRecurse(FileType.FILES) { file ->
     def jobName = file.path.split('/')[-1].split("\\.")[0]
-    if (['init-jobs', 'bootstrap'].contains(jobName)) {
+    if (!['init-jobs', 'bootstrap'].contains(jobName)) {
         jobScripts[jobName] = "jobs/${jobName}.dsl"
     }
 }
