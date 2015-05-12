@@ -1,10 +1,21 @@
 apply plugin: 'groovy'
 
 configurations { providedCompile }
+sourceSets {
+    jobs {
+        groovy {
+            srcDirs 'jobs'
+        }
+    }
+    main {
+        compileClasspath += configurations.providedCompile
+    }
+    test {
+        compileClasspath += configurations.providedCompile
+        runtimeClasspath += configurations.providedCompile
+    }
+}
 
-sourceSets.main.compileClasspath += configurations.providedCompile
-sourceSets.test.compileClasspath += configurations.providedCompile
-sourceSets.test.runtimeClasspath += configurations.providedCompile
 
 repositories {
     jcenter()
@@ -30,7 +41,14 @@ dependencies {
     providedCompile 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r'
     testCompile 'org.objenesis:objenesis:2.1'
     testCompile 'cglib:cglib:3.1'
-    testCompile('org.spockframework:spock-core:0.7-groovy-1.8')
+    testCompile('org.spockframework:spock-core:0.7-groovy-1.8') {
+        exclude module: 'groovy-all'
+    }
+}
 
 
+task workspace(type: Copy) {
+    from fileTree(dir: 'jobs')
+    from 'src/main/groovy'
+    into 'build/workspace'
 }
