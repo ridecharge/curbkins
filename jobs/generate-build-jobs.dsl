@@ -1,7 +1,7 @@
 import groovy.json.JsonSlurper
 import javaposse.jobdsl.dsl.DslFactory
 
-def jobs =  {
+def Map<String, String> jobs =  {
     def json = new JsonSlurper().parseText(['curl', 'consul:8500/v1/kv/jenkins/jobs?recurse'].execute().text)
     jobs = [:]
     for(kv in json) {
@@ -21,11 +21,11 @@ def dslFactory = this as DslFactory
 for(j in jobs) {
     def jobName = j.key
     def config = j.value
-    def String repo = config['repo']
-    def String params = config['parameters']
-    def String downstreams = config['downstreams']
-    def String bran = config['branch']
-    def String cmd = config['cmd']
+    def repo = config['repo']
+    def params = config['parameters']
+    def downstreams = config['downstreams']
+    def bran = config['branch']
+    def cmd = config['cmd']
 
     dslFactory.job(jobName) {
         blockOnUpstreamProjects()
