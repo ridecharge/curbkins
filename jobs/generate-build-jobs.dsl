@@ -28,7 +28,7 @@ for(j in jobs) {
     def cmd = config['cmd']
 
     dslFactory.job(jobName) {
-        blockOnUpstreamProjects()
+        blockOn('generate-config-jobs')
         logRotator(10, 10)
 
         if(repo) {
@@ -61,16 +61,16 @@ for(j in jobs) {
                     downstream(down.trim())
                 }
             }
-        }
-        configure { project ->
-            project / 'publishers' << 'jenkins.plugins.hipchat.HipChatNotifier' {
-                startNotification true
-                notifyAborted true
-                notifyFailure true
-                notifyNotBuilt true
-                notifySuccess true
-                notifyUnstable true
-                notifyBackToNormal true
+            configure { project ->
+                project / 'publishers' << 'jenkins.plugins.hipchat.HipChatNotifier' {
+                    startNotification true
+                    notifyAborted true
+                    notifyFailure true
+                    notifyNotBuilt true
+                    notifySuccess true
+                    notifyUnstable true
+                    notifyBackToNormal true
+                }
             }
         }
     }
