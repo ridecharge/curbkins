@@ -7,11 +7,18 @@ import jenkins.model.JenkinsLocationConfiguration
  * Created by sgarlick on 5/8/15.
  */
 class InstanceAdmin implements InstanceConfig {
+
     JenkinsLocationConfiguration jenkinsLocationConfiguration
     String adminEmailAddress
+
     def configure() {
         jenkinsLocationConfiguration.setAdminAddress(adminEmailAddress)
         jenkinsLocationConfiguration.save()
+    }
+
+    static def get() {
+        return new InstanceAdmin(jenkinsLocationConfiguration: JenkinsLocationConfiguration.get(),
+                                 adminEmailAddress: getAdminEmailAddress())
     }
 
     static def getAdminEmailAddress() {

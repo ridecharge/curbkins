@@ -8,16 +8,23 @@ import jenkins.model.Jenkins
  * Created by sgarlick on 5/8/15.
  */
 class InstanceGit implements InstanceConfig {
+
     Jenkins instance
     String globalConfigName
     String globalConfigEmail
 
     def configure() {
-        def desc = instance.getDescriptorByType(GitSCM.DescriptorImpl.class)
+        def desc = instance.getDescriptorByType(GitSCM.DescriptorImpl)
         System.println(desc)
         desc.setGlobalConfigName(globalConfigName)
         desc.setGlobalConfigEmail(globalConfigEmail)
         desc.save()
+    }
+
+    static def get() {
+        return new InstanceGit(instance: Jenkins.getInstance(),
+                               globalConfigName: getGlobalConfigName(),
+                               globalConfigEmail: getGlobalConfigEmail())
     }
 
     static def getGlobalConfigName() {

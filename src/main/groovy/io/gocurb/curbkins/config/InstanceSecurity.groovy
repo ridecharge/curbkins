@@ -13,11 +13,12 @@ import groovy.json.JsonSlurper
  * Configures Jenkins security via Google Login
  * and Consul for Permissions
  */
-class InstanceSecurity  implements InstanceConfig {
+class InstanceSecurity implements InstanceConfig {
+
     Jenkins instance
     SecurityRealm securityRealm
     AuthorizationStrategy authorizationStrategy
-    static Map<String, Permission> permissions = ['ADMINISTER':Jenkins.ADMINISTER, 'READ':Jenkins.READ]
+    static Map<String, Permission> permissions = ['ADMINISTER': Jenkins.ADMINISTER, 'READ': Jenkins.READ]
 
     def configure() {
         instance.setSecurityRealm(securityRealm)
@@ -25,29 +26,39 @@ class InstanceSecurity  implements InstanceConfig {
         instance.save()
     }
 
+    static def get() {
+        return new InstanceSecurity(instance: Jenkins.getInstance(),
+                                    securityRealm: getGoogleSecurityRealm(),
+                                    authorizationStrategy: getMatrixAuthorizationStrategy())
+    }
+
     static def getMatrixAuthorizationStrategy() {
         def strategy = new GlobalMatrixAuthorizationStrategy()
-        for(user in getUsers().values()) {
+        for (user in getUsers().values()) {
             strategy.add(permissions[user.jenkins_api_permission], user.email)
         }
         return strategy
     }
 
     static def getGoogleSecurityRealm() {
-        def clientId = ['curl', 'consul:8500/v1/kv/jenkins/config/GOOGLE_AUTH_CLIENT_ID?raw'].execute().text
-        def clientSecret = ['curl', 'consul:8500/v1/kv/jenkins/config/GOOGLE_AUTH_CLIENT_SECRET?raw'].execute().text
-        def domain = ['curl', 'consul:8500/v1/kv/jenkins/config/GOOGLE_AUTH_DOMAIN?raw'].execute().text
+        def clientId = ['curl', 'consul:8500/v1/kv/jenkins/config/GOOGLE_AUTH_CLIENT_ID?raw'].
+                execute().text
+        def clientSecret = ['curl', 'consul:8500/v1/kv/jenkins/config/GOOGLE_AUTH_CLIENT_SECRET?raw'].
+                execute().text
+        def domain = ['curl', 'consul:8500/v1/kv/jenkins/config/GOOGLE_AUTH_DOMAIN?raw'].
+                execute().text
         return new GoogleOAuth2SecurityRealm(clientId, clientSecret, domain)
     }
 
     static def getUsers() {
-        def kvs = new JsonSlurper().parseText(['curl', 'consul:8500/v1/kv/users?recurse'].execute().text)
+        def kvs = new JsonSlurper().
+                parseText(['curl', 'consul:8500/v1/kv/users?recurse'].execute().text)
         def users = [:]
-        for(kv in kvs) {
+        for (kv in kvs) {
             def split = kv.Key.split('/')
             def username = split[1]
             def prop = split[2]
-            if(!users[username]) {
+            if (!users[username]) {
                 users[username] = [:]
             }
             users[username][prop] = new String(kv.Value.decodeBase64())
