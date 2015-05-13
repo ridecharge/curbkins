@@ -1,20 +1,26 @@
 import groovy.json.JsonSlurper
 import javaposse.jobdsl.dsl.DslFactory
-
-def Map<String, String> jobs =  {
-    def json = new JsonSlurper().parseText(['curl', 'consul:8500/v1/kv/jenkins/jobs?recurse'].execute().text)
-    jobs = [:]
-    for(kv in json) {
-        def splits = kv.Key.split('/')
-        def name = splits[2]
-        def prop = splits[3]
-        if(!jobs[name]) {
-            jobs[name] = [:]
+def Map<String, String> jobs
+try {
+    jobs = {
+        def json = new JsonSlurper().
+                parseText(['curl', 'consul:8500/v1/kv/jenkins/jobs?recurse'].execute().text)
+        jobs = [:]
+        for (kv in json) {
+            def splits = kv.Key.split('/')
+            def name = splits[2]
+            def prop = splits[3]
+            if (!jobs[name]) {
+                jobs[name] = [:]
+            }
+            jobs[name][prop] = new String(kv.Value.decodeBase64())
         }
-        jobs[name][prop] = new String(kv.Value.decodeBase64())
-    }
-    return jobs
-}()
+        return jobs
+    }()
+} catch (Exception e)
+{
+    jobs = [:]
+}
 def dslFactory = this as DslFactory
 
 
