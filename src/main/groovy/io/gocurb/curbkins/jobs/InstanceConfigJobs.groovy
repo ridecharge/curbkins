@@ -9,13 +9,13 @@ import jenkins.plugins.hipchat.HipChatNotifier
  */
 class InstanceConfigJobs {
 
-    static Map<String, String> configJobs = [
-            'jenkins-security-config': InstanceSecurity.name,
-            'jenkins-git-config'     : InstanceGit.name,
-            'jenkins-github-config'  : InstanceGithub.name,
-            'jenkins-hipchat-config' : InstanceNotifications.name,
-            'jenkins-ssh-config'     : InstanceSshCredentials.name,
-            'jenkins-admin-config'   : InstanceAdmin.name,
+    static configJobs = [
+            'jenkins-security-config': InstanceSecurity,
+            'jenkins-git-config'     : InstanceGit,
+            'jenkins-github-config'  : InstanceGithub,
+            'jenkins-hipchat-config' : InstanceNotifications,
+            'jenkins-ssh-config'     : InstanceSshCredentials,
+            'jenkins-admin-config'   : InstanceAdmin,
 
     ]
     DslFactory dslFactory
@@ -41,7 +41,8 @@ class InstanceConfigJobs {
                         tasks('build')
                     }
                     systemGroovyCommand(
-                            "${entry.value}.get().configure()") {
+                            """import ${entry.value.name}\n
+                               {entry.value.simpleName}.get().configure()""") {
                         classpath('$WORKSPACE/build/libs/curbkins.jar')
                     }
                 }

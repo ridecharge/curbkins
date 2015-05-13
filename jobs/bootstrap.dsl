@@ -18,7 +18,7 @@ dslFactory.job('init-jobs') {
         }
         dsl {
             additionalClasspath('build/libs/curbkins.jar')
-            external('jobs/init-jobs.dsl')
+            text(readFileFromWorkspace('jobs/init-jobs.dsl')
         }
     }
 }
