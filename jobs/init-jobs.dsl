@@ -26,7 +26,7 @@ try {
 }
 def buildJobBlocks = Sets.newHashSet(InstanceConfigJobs.configJobs.keySet())
 buildJobBlocks.add('generate-config-jobs')
-def blockOns = ['generate-build-jobs': buildJobBlocks]
+def blockOns = ['generate-build-jobs': buildJobBlocks.join(',')]
 
 def dslFactory = this as DslFactory
 for (jobScript in jobScripts.entrySet()) {
@@ -44,9 +44,7 @@ for (jobScript in jobScripts.entrySet()) {
             }
         }
         if (blockOns[jobName] != null) {
-            for (block in blockOns[jobName]) {
-                blockOn(block)
-            }
+            blockOn(blockOns[jobName])
         }
         triggers {
             upstream('init-jobs')

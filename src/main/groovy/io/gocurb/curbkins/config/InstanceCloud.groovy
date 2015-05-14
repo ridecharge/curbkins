@@ -57,7 +57,13 @@ class InstanceCloud {
             return securityGroup.groupName
         }.join(",")
         def instanceProfile = instance.iamInstanceProfile.arn
-        def tags = instance.tags.collect { tag ->
+        def tags = instance.tags.findAll { tag ->
+            tag.key in ['Environment', 'Role', 'Name']
+        }
+        def ec2Tags = tags.collect { tag ->
+            if(tag.key == 'Name') {
+                return new EC2Tag(tag.key, "${tag.value}-slave")
+            }
             return new EC2Tag(tag)
         }
         def template = new SlaveTemplate(ami, '', null, securityGroups, '/var/lib/jenkins',
@@ -66,7 +72,7 @@ class InstanceCloud {
                                          """#!/bin/sh
                                          curl http://consul.gocurb.internal/v1/kv/userdata/curbkins-slave/script?raw | sh""",
                                          "4", 'ubuntu', new UnixData('', '22'), '', false, subnet,
-                                         tags, "30", true, "4", instanceProfile,
+                                         ec2Tags, "30", true, "4", instanceProfile,
                                          false, false, '', false,
                                          '')
         return new AmazonEC2Cloud(true, '', '', region, getPrivateKey(), '4',
