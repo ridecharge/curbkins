@@ -5,7 +5,6 @@ import com.amazonaws.services.ec2.model.DescribeInstancesRequest
 import com.amazonaws.services.ec2.model.InstanceType
 import com.google.common.collect.Lists
 import hudson.model.Node
-import hudson.model.labels.LabelAtom
 import hudson.plugins.ec2.AmazonEC2Cloud
 import hudson.plugins.ec2.EC2Tag
 import hudson.plugins.ec2.SlaveTemplate
@@ -23,8 +22,6 @@ class InstanceCloud {
     def configure() {
         if (jenkins.clouds.size() == 0) {
             jenkins.clouds.add(cloud)
-            jenkins.labels.add(new LabelAtom('master'))
-            jenkins.setNumExecutors(2)
             jenkins.save()
         }
     }
@@ -61,13 +58,7 @@ class InstanceCloud {
         }.join(",")
         def instanceProfile = instance.iamInstanceProfile.arn
         def tags = instance.tags.collect { tag ->
-            if (tag.key in ['Environment', 'Role']) {
-                return new EC2Tag(tag.key, tag.value)
-            }
-            if (tag.key == 'Name') {
-                return new EC2Tag(tag.key, "${tag.value}-slave",)
-            }
-            return null
+            return new EC2Tag(tag.key, tag.value)
         }
         def template = new SlaveTemplate(ami, '', null, securityGroups, '/var/lib/jenkins',
                                          InstanceType.M3Xlarge, '', Node.Mode.NORMAL,
