@@ -39,7 +39,7 @@ class InstanceConfigJobs {
                         tasks('build')
                     }
                     systemGroovyCommand("${entry.value.name}.get().configure()") {
-                        classpath("/var/lib/jenkins/jobs/${name}/workspace/build/libs/curbkins.jar")
+                        classpath("/var/lib/jenkins/workspace/${name}/build/libs/curbkins.jar")
                     }
                 }
             })
