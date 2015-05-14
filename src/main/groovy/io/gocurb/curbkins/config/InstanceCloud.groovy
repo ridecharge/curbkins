@@ -7,6 +7,7 @@ import com.amazonaws.services.ec2.model.InstanceType
 import com.google.common.collect.Lists
 import hudson.model.Node
 import hudson.plugins.ec2.AmazonEC2Cloud
+import hudson.plugins.ec2.EC2Tag
 import hudson.plugins.ec2.SlaveTemplate
 import hudson.plugins.ec2.UnixData
 import hudson.slaves.Cloud
@@ -21,7 +22,7 @@ class InstanceCloud {
     Cloud cloud
 
     def configure() {
-        if(jenkins.clouds.size() == 0) {
+        if (jenkins.clouds.size() == 0) {
             jenkins.clouds.add(cloud)
             jenkins.setNumExecutors(0)
             jenkins.save()
@@ -41,7 +42,8 @@ class InstanceCloud {
     }
 
     static def getPrivateKey() {
-        return ['curl', 'http://consul.gocurb.internal/v1/kv/jenkins/slave/private-key?raw'].execute().text
+        return ['curl', 'http://consul.gocurb.internal/v1/kv/jenkins/slave/private-key?raw'].
+                execute().text
     }
 
     static def getAmazonEC2Cloud() {
@@ -58,15 +60,25 @@ class InstanceCloud {
             return securityGroup.groupName
         }.join(",")
         def instanceProfile = instance.iamInstanceProfile.arn
+        def tags = instance.tags.collect { tag ->
+            if (tag.key in ['Environment', 'Role']) {
+                return new EC2Tag(tag.key, tag.value)
+            }
+            if (tag.key == 'Name') {
+                return new EC2Tag(tag.key, "${tag.value}-slave",)
+            }
+            return null
+        }
         def template = new SlaveTemplate(ami, '', null, securityGroups, '/var/lib/jenkins',
                                          InstanceType.M3Xlarge, '', Node.Mode.NORMAL,
                                          'jenkins-slave-curbix', '', '',
                                          """#!/bin/sh
                                          curl http://consul.gocurb.internal/v1/kv/userdata/curbkins-slave/script?raw | sh""",
                                          "4", 'ubuntu', new UnixData('', '22'), '', false, subnet,
-                                         Lists.newArrayList(), "30", true, "4", instanceProfile,
+                                         tags, "30", true, "4", instanceProfile,
                                          false, false, '', false,
                                          '')
-        return new AmazonEC2Cloud(true, '', '', region, getPrivateKey(), '4', Lists.newArrayList(template));
+        return new AmazonEC2Cloud(true, '', '', region, getPrivateKey(), '4',
+                                  Lists.newArrayList(template));
     }
 }
