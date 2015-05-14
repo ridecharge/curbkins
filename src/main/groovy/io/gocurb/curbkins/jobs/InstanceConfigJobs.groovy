@@ -1,9 +1,6 @@
 package io.gocurb.curbkins.jobs
-
 import io.gocurb.curbkins.config.*
 import javaposse.jobdsl.dsl.DslFactory
-import jenkins.plugins.hipchat.HipChatNotifier
-
 /**
  * Created by sgarlick on 5/11/15.
  */
@@ -40,23 +37,8 @@ class InstanceConfigJobs {
                     gradle {
                         tasks('build')
                     }
-                    systemGroovyCommand(
-                            """import ${entry.value.name}
-                            ${entry.value.simpleName}.get().configure()""") {
-                        classpath('$WORKSPACE/build/libs/curbkins.jar')
-                    }
-                }
-                publishers {
-                    configure { project ->
-                        project / 'publishers' << HipChatNotifier {
-                            startNotification true
-                            notifyAborted true
-                            notifyFailure true
-                            notifyNotBuilt true
-                            notifySuccess true
-                            notifyUnstable true
-                            notifyBackToNormal true
-                        }
+                    systemGroovyCommand("${entry.value.name}.get().configure()") {
+                        classpath("/var/lib/jenkins/jobs/${name}/workspace/build/libs/curbkins.jar")
                     }
                 }
             })
