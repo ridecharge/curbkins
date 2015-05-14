@@ -1,6 +1,8 @@
+import com.google.common.collect.Sets
 import groovy.io.FileType
 import hudson.FilePath
 import hudson.model.Executor
+import io.gocurb.curbkins.jobs.InstanceConfigJobs
 import javaposse.jobdsl.dsl.DslFactory
 
 def Map<String, String> jobScripts = [:]
@@ -13,7 +15,7 @@ try {
             jobScripts[jobName] = "jobs/${jobName}.dsl"
         }
     }
-} catch(NullPointerException e) {
+} catch (NullPointerException e) {
     //for tests
     new File("jobs").eachFileRecurse(FileType.FILES) { file ->
         def jobName = file.path.split('/')[-1].split("\\.")[0]
@@ -22,14 +24,16 @@ try {
         }
     }
 }
-
-def blockOns = ['generate-build-jobs': 'generate-config-jobs']
+def buildJobBlocks = Sets.newHashSet(InstanceConfigJobs.configJobs.keySet())
+buildJobBlocks.add('generate-config-jobs')
+def blockOns = ['generate-build-jobs': buildJobBlocks]
 
 def dslFactory = this as DslFactory
 for (jobScript in jobScripts.entrySet()) {
     def jobName = jobScript.key
     def jobPath = jobScript.value
     dslFactory.job(jobName) {
+        label('master')
         blockOnUpstreamProjects()
         scm {
             git {
@@ -39,8 +43,10 @@ for (jobScript in jobScripts.entrySet()) {
                 }
             }
         }
-        if(blockOns[jobName]?.trim()) {
-            blockOn(blockOns[jobName])
+        if (blockOns[jobName] != null) {
+            for (block in blockOns[jobName]) {
+                blockOn(block)
+            }
         }
         triggers {
             upstream('init-jobs')

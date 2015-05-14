@@ -2,6 +2,7 @@ import javaposse.jobdsl.dsl.DslFactory
 
 def dslFactory = this as DslFactory
 dslFactory.job('init-jobs') {
+    label('master')
     scm {
         git {
             remote {
