@@ -38,6 +38,7 @@ dependencies {
     providedCompile 'org.jenkins-ci.plugins:job-dsl-core:1.34'
     providedCompile 'org.kohsuke:github-api:1.68'
     providedCompile 'org.jenkins-ci.plugins:git-client:1.17.0@jar'
+    providedCompile 'org.jenkins-ci.plugins:ec2:1.27@jar'
     providedCompile 'org.jenkins-ci.modules:instance-identity:1.4'
     providedCompile 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r'
     testCompile 'org.objenesis:objenesis:2.1'
