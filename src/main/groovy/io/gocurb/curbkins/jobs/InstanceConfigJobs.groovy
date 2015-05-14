@@ -41,8 +41,8 @@ class InstanceConfigJobs {
                         tasks('build')
                     }
                     systemGroovyCommand(
-                            """import ${entry.value.name}\n
-                               {entry.value.simpleName}.get().configure()""") {
+                            """import ${entry.value.name}
+                            ${entry.value.simpleName}.get().configure()""") {
                         classpath('$WORKSPACE/build/libs/curbkins.jar')
                     }
                 }

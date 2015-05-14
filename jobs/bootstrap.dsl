@@ -1,4 +1,5 @@
 import javaposse.jobdsl.dsl.DslFactory
+
 def dslFactory = this as DslFactory
 dslFactory.job('init-jobs') {
     scm {
@@ -19,11 +20,12 @@ dslFactory.job('init-jobs') {
         dsl {
             additionalClasspath('build/libs/curbkins.jar')
             try {
+
                 text(readFileFromWorkspace('jobs/init-jobs.dsl'))
             }
-            catch(FileNotFoundException e)
+            catch (FileNotFoundException e)
             {
-                //test
+                external('jobs/init-jobs.dsl')
             }
         }
     }
