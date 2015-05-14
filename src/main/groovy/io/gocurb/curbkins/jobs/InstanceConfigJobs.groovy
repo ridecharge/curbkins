@@ -23,6 +23,7 @@ class InstanceConfigJobs {
         for (entry in configJobs.entrySet()) {
             jobs.add(dslFactory.job(entry.getKey()) {
                 blockOnUpstreamProjects()
+                label('master')
                 triggers {
                     upstream('generate-config-jobs')
                 }
@@ -39,7 +40,7 @@ class InstanceConfigJobs {
                         tasks('build')
                     }
                     systemGroovyCommand("${entry.value.name}.get().configure()") {
-                        classpath("/var/lib/jenkins/workspace/${name}/build/libs/curbkins.jar")
+                        classpath('$WORKSPACE/build/libs/curbkins.jar')
                     }
                 }
             })

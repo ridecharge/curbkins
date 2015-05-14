@@ -1,18 +1,17 @@
 package io.gocurb.curbkins.config
-
 import com.amazonaws.services.ec2.AmazonEC2
 import com.amazonaws.services.ec2.AmazonEC2Client
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest
 import com.amazonaws.services.ec2.model.InstanceType
 import com.google.common.collect.Lists
 import hudson.model.Node
+import hudson.model.labels.LabelAtom
 import hudson.plugins.ec2.AmazonEC2Cloud
 import hudson.plugins.ec2.EC2Tag
 import hudson.plugins.ec2.SlaveTemplate
 import hudson.plugins.ec2.UnixData
 import hudson.slaves.Cloud
 import jenkins.model.Jenkins
-
 /**
  * Created by sgarlick on 5/14/15.
  */
@@ -24,7 +23,8 @@ class InstanceCloud {
     def configure() {
         if (jenkins.clouds.size() == 0) {
             jenkins.clouds.add(cloud)
-            jenkins.setNumExecutors(0)
+            jenkins.labels.add(new LabelAtom('master'))
+            jenkins.setNumExecutors(2)
             jenkins.save()
         }
     }
@@ -38,11 +38,11 @@ class InstanceCloud {
     }
 
     static def getAmiId() {
-        return ['curl', 'http://consul.gocurb.internal/v1/kv/jenkins/slave/ami?raw'].execute().text
+        return ['curl', 'http://consul:8500/v1/kv/jenkins/slave/ami?raw'].execute().text
     }
 
     static def getPrivateKey() {
-        return ['curl', 'http://consul.gocurb.internal/v1/kv/jenkins/slave/private-key?raw'].
+        return ['curl', 'http://consul:8500/v1/kv/jenkins/slave/private-key?raw'].
                 execute().text
     }
 

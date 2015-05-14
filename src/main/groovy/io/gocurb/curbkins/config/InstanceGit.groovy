@@ -28,10 +28,10 @@ class InstanceGit implements InstanceConfig {
     }
 
     static def getGlobalConfigName() {
-        return ['curl', 'consul.gocurb.internal/v1/kv/jenkins/config/GIT_COMMIT_NAME?raw'].execute().text
+        return ['curl', 'http://consul:8500/v1/kv/jenkins/config/GIT_COMMIT_NAME?raw'].execute().text
     }
 
     static def getGlobalConfigEmail() {
-        return ['curl', 'consul.gocurb.internal/v1/kv/jenkins/config/GIT_COMMIT_EMAIL?raw'].execute().text
+        return ['curl', 'http://consul:8500/v1/kv/jenkins/config/GIT_COMMIT_EMAIL?raw'].execute().text
     }
 }

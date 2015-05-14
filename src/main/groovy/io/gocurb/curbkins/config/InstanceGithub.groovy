@@ -30,10 +30,10 @@ class InstanceGithub implements InstanceConfig {
     }
 
     static def getUsername() {
-        return ['curl', 'consul.gocurb.internal/v1/kv/jenkins/config/GITHUB_OAUTH2_USER?raw'].execute().text
+        return ['curl', 'http://consul:8500/v1/kv/jenkins/config/GITHUB_OAUTH2_USER?raw'].execute().text
     }
 
     static def getOauthToken() {
-        return ['curl', 'consul.gocurb.internal/v1/kv/jenkins/config/GITHUB_OAUTH2_TOKEN?raw'].execute().text
+        return ['curl', 'http://consul:8500/v1/kv/jenkins/config/GITHUB_OAUTH2_TOKEN?raw'].execute().text
     }
 }
