@@ -1,8 +1,6 @@
-import com.google.common.collect.Sets
 import groovy.io.FileType
 import hudson.FilePath
 import hudson.model.Executor
-import io.gocurb.curbkins.jobs.InstanceConfigJobs
 import javaposse.jobdsl.dsl.DslFactory
 
 def Map<String, String> jobScripts = [:]
@@ -24,9 +22,8 @@ try {
         }
     }
 }
-def buildJobBlocks = Sets.newHashSet(InstanceConfigJobs.configJobs.keySet())
-buildJobBlocks.add('generate-config-jobs')
-def blockOns = ['generate-build-jobs': buildJobBlocks.join(',')]
+
+def blockOns = ['generate-build-jobs': ['jenkins-.*-config', 'generate-config-jobs'].join('\n')]
 
 def dslFactory = this as DslFactory
 for (jobScript in jobScripts.entrySet()) {
