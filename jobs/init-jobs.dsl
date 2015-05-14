@@ -51,14 +51,8 @@ for (jobScript in jobScripts.entrySet()) {
             }
             dsl {
                 additionalClasspath('build/libs/curbkins.jar')
-                try {
+                external(jobPath)
 
-                    text(readFileFromWorkspace(jobPath))
-                }
-                catch (FileNotFoundException e)
-                {
-                    external(jobPath)
-                }
             }
         }
     }

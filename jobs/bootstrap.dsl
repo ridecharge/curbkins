@@ -19,14 +19,7 @@ dslFactory.job('init-jobs') {
         }
         dsl {
             additionalClasspath('build/libs/curbkins.jar')
-            try {
-
-                text(readFileFromWorkspace('jobs/init-jobs.dsl'))
-            }
-            catch (FileNotFoundException e)
-            {
-                external('jobs/init-jobs.dsl')
-            }
+            external('jobs/init-jobs.dsl')
         }
     }
 }
