@@ -58,7 +58,7 @@ class InstanceCloud {
         }.join(",")
         def instanceProfile = instance.iamInstanceProfile.arn
         def tags = instance.tags.collect { tag ->
-            return new EC2Tag(tag.key, tag.value)
+            return new EC2Tag(tag)
         }
         def template = new SlaveTemplate(ami, '', null, securityGroups, '/var/lib/jenkins',
                                          InstanceType.M3Xlarge, '', Node.Mode.NORMAL,
