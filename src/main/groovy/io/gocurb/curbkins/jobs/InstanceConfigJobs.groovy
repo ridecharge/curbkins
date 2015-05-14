@@ -13,6 +13,7 @@ class InstanceConfigJobs {
             'jenkins-hipchat-config' : InstanceNotifications,
             'jenkins-ssh-config'     : InstanceSshCredentials,
             'jenkins-admin-config'   : InstanceAdmin,
+            'jenkins-cloud-config'   : InstanceCloud,
 
     ]
     DslFactory dslFactory

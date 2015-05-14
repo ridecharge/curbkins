@@ -22,6 +22,6 @@ class InstanceAdmin implements InstanceConfig {
     }
 
     static def getAdminEmailAddress() {
-        return ['curl', 'consul:8500/v1/kv/jenkins/config/JENKINS_ADMIN_ADDRESS?raw'].execute().text
+        return ['curl', 'consul.gocurb.internal/v1/kv/jenkins/config/JENKINS_ADMIN_ADDRESS?raw'].execute().text
     }
 }

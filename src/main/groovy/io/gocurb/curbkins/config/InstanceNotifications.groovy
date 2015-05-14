@@ -27,11 +27,11 @@ class InstanceNotifications implements InstanceConfig {
     }
 
     static def getOauthToken() {
-        return ['curl', 'consul:8500/v1/kv/jenkins/config/HIPCHAT_OAUTH2_TOKEN?raw'].execute().text
+        return ['curl', 'consul.gocurb.internal/v1/kv/jenkins/config/HIPCHAT_OAUTH2_TOKEN?raw'].execute().text
     }
 
     static def getNotificationRoom() {
-        return ['curl', 'consul:8500/v1/kv/jenkins/config/HIPCHAT_NOTIFICATION_ROOM_ID?raw'].
+        return ['curl', 'consul.gocurb.internal/v1/kv/jenkins/config/HIPCHAT_NOTIFICATION_ROOM_ID?raw'].
                 execute().text
     }
 }

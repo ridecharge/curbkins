@@ -41,18 +41,18 @@ class InstanceSecurity implements InstanceConfig {
     }
 
     static def getGoogleSecurityRealm() {
-        def clientId = ['curl', 'consul:8500/v1/kv/jenkins/config/GOOGLE_AUTH_CLIENT_ID?raw'].
+        def clientId = ['curl', 'consul.gocurb.internal/v1/kv/jenkins/config/GOOGLE_AUTH_CLIENT_ID?raw'].
                 execute().text
-        def clientSecret = ['curl', 'consul:8500/v1/kv/jenkins/config/GOOGLE_AUTH_CLIENT_SECRET?raw'].
+        def clientSecret = ['curl', 'consul.gocurb.internal/v1/kv/jenkins/config/GOOGLE_AUTH_CLIENT_SECRET?raw'].
                 execute().text
-        def domain = ['curl', 'consul:8500/v1/kv/jenkins/config/GOOGLE_AUTH_DOMAIN?raw'].
+        def domain = ['curl', 'consul.gocurb.internal/v1/kv/jenkins/config/GOOGLE_AUTH_DOMAIN?raw'].
                 execute().text
         return new GoogleOAuth2SecurityRealm(clientId, clientSecret, domain)
     }
 
     static def getUsers() {
         def kvs = new JsonSlurper().
-                parseText(['curl', 'consul:8500/v1/kv/users?recurse'].execute().text)
+                parseText(['curl', 'consul.gocurb.internal/v1/kv/users?recurse'].execute().text)
         def users = [:]
         for (kv in kvs) {
             def split = kv.Key.split('/')
