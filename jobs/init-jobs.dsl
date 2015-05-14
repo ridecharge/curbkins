@@ -1,25 +1,11 @@
 import groovy.io.FileType
-import hudson.FilePath
-import hudson.model.Executor
 import javaposse.jobdsl.dsl.DslFactory
 
 def Map<String, String> jobScripts = [:]
-try {
-    //find files while on slave
-    FilePath jobsDir = Executor.currentExecutor().getCurrentWorkspace().child('jobs')
-    for (filePath in jobsDir.list()) {
-        def jobName = filePath.name.split("\\.")[0]
-        if (!['init-jobs', 'bootstrap'].contains(jobName)) {
-            jobScripts[jobName] = "jobs/${jobName}.dsl"
-        }
-    }
-} catch (NullPointerException e) {
-    //for tests
-    new File("jobs").eachFileRecurse(FileType.FILES) { file ->
-        def jobName = file.path.split('/')[-1].split("\\.")[0]
-        if (!['init-jobs', 'bootstrap'].contains(jobName)) {
-            jobScripts[jobName] = "jobs/${jobName}.dsl"
-        }
+new File("jobs").eachFileRecurse(FileType.FILES) { file ->
+    def jobName = file.path.split('/')[-1].split("\\.")[0]
+    if (!['init-jobs', 'bootstrap'].contains(jobName)) {
+        jobScripts[jobName] = "jobs/${jobName}.dsl"
     }
 }
 
