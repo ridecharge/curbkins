@@ -50,7 +50,7 @@ class InstanceCloud {
                 execute().text
     }
 
-    private static def getInstance(amazonEC2, String instanceId) {
+    private static def getInstance(amazonEC2, instanceId) {
         def DescribeInstancesRequest request = new DescribeInstancesRequest().
                 withInstanceIds(instanceId)
         def response = amazonEC2.describeInstances(request)
@@ -70,7 +70,7 @@ class InstanceCloud {
         return ec2Tags
     }
 
-    private static SlaveTemplate getMainSlaveTemplate(instance, amiId) {
+    private static def getMainSlaveTemplate(instance, amiId) {
         def subnet = instance.subnetId
         def securityGroups = instance.securityGroups.collect { securityGroup ->
             return securityGroup.groupName
