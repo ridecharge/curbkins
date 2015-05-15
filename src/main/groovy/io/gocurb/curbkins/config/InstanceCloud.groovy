@@ -1,5 +1,5 @@
 package io.gocurb.curbkins.config
-import com.amazonaws.services.ec2.AmazonEC2
+
 import com.amazonaws.services.ec2.AmazonEC2Client
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest
 import com.amazonaws.services.ec2.model.InstanceType
@@ -27,55 +27,69 @@ class InstanceCloud {
     }
 
     static def get() {
-        return new InstanceCloud(jenkins: Jenkins.instance, cloud: getAmazonEC2Cloud())
+        def amazonEC2 = new AmazonEC2Client()
+        def instance = getInstance(amazonEC2, getInstanceId())
+        def az = instance.placement.availabilityZone
+        def region = az.substring(0, az.length() - 1)
+        def slaveTemplate = getMainSlaveTemplate(instance, getAmiId())
+        def cloud = getAmazonEC2Cloud(region, slaveTemplate, getPrivateKey())
+        return new InstanceCloud(jenkins: Jenkins.instance,
+                                 cloud: cloud)
     }
 
-    static def getInstanceId() {
+    private static def getInstanceId() {
         return ['curl', 'http://169.254.169.254/latest/meta-data/instance-id'].execute().text
     }
 
-    static def getAmiId() {
+    private static def getAmiId() {
         return ['curl', 'http://consul:8500/v1/kv/jenkins/slave/ami?raw'].execute().text
     }
 
-    static def getPrivateKey() {
+    private static def getPrivateKey() {
         return ['curl', 'http://consul:8500/v1/kv/jenkins/slave/private-key?raw'].
                 execute().text
     }
 
-    static def getAmazonEC2Cloud() {
-        def ami = getAmiId()
-        def AmazonEC2 amazonEC2 = new AmazonEC2Client()
+    private static def getInstance(amazonEC2, String instanceId) {
         def DescribeInstancesRequest request = new DescribeInstancesRequest().
-                withInstanceIds(getInstanceId())
+                withInstanceIds(instanceId)
         def response = amazonEC2.describeInstances(request)
-        def instance = response.reservations[0].instances[0]
-        def az = instance.placement.availabilityZone
-        def region = az.substring(0, az.length() - 1)
+        return response.reservations[0].instances[0]
+    }
+
+    private static def getTags(instance) {
+        def tags = instance.tags.findAll { tag ->
+            tag.key in ['Environment', 'Role', 'Name']
+        }
+        def ec2Tags = tags.collect { tag ->
+            if (tag.key == 'Name') {
+                return new EC2Tag(tag.key, "${tag.value}-slave")
+            }
+            return new EC2Tag(tag)
+        }
+        return ec2Tags
+    }
+
+    private static SlaveTemplate getMainSlaveTemplate(instance, amiId) {
         def subnet = instance.subnetId
         def securityGroups = instance.securityGroups.collect { securityGroup ->
             return securityGroup.groupName
         }.join(",")
         def instanceProfile = instance.iamInstanceProfile.arn
-        def tags = instance.tags.findAll { tag ->
-            tag.key in ['Environment', 'Role', 'Name']
-        }
-        def ec2Tags = tags.collect { tag ->
-            if(tag.key == 'Name') {
-                return new EC2Tag(tag.key, "${tag.value}-slave")
-            }
-            return new EC2Tag(tag)
-        }
-        def template = new SlaveTemplate(ami, '', null, securityGroups, '/var/lib/jenkins',
+        def tags = getTags(instance)
+        return new SlaveTemplate(amiId, '', null, securityGroups, '/var/lib/jenkins',
                                          InstanceType.M3Xlarge, '', Node.Mode.NORMAL,
                                          'jenkins-slave-curbix', '', '',
                                          """#!/bin/sh
                                          curl http://consul.gocurb.internal/v1/kv/userdata/curbkins-slave/script?raw | sh""",
                                          "4", 'ubuntu', new UnixData('', '22'), '', false, subnet,
-                                         ec2Tags, "30", true, "4", instanceProfile,
+                                         tags, "30", true, "4", instanceProfile,
                                          false, false, '', false,
                                          '')
-        return new AmazonEC2Cloud(true, '', '', region, getPrivateKey(), '4',
-                                  Lists.newArrayList(template));
+    }
+
+    static def getAmazonEC2Cloud(region, slaveTemplate, String privateKey) {
+        return new AmazonEC2Cloud(true, '', '', region, privateKey, '4',
+                                  Lists.newArrayList(slaveTemplate));
     }
 }
