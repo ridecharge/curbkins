@@ -30,12 +30,13 @@ for(j in jobs) {
     def repo = config['repo']
     def params = config['parameters']
     def downstreams = config['downstreams']
+    def upstreams = config['upstreams']
     def bran = config['branch']
     def cmd = config['cmd']
 
     dslFactory.job(jobName) {
         logRotator(10, 10)
-
+        blockOnUpstreamProjects()
         if(repo) {
             scm {
                 git {
@@ -59,6 +60,13 @@ for(j in jobs) {
         }
         steps {
             shell(cmd)
+        }
+        triggers {
+            if(upstreams?.trim()) {
+                for(up in upstreams.split(',')) {
+                    upstream(up.trim())
+                }
+            }
         }
         publishers {
             if(downstreams?.trim()) {
