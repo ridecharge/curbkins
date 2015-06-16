@@ -54,3 +54,7 @@ task workspace(type: Copy) {
     from 'src/main/groovy'
     into 'build/workspace'
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.4'
+}
