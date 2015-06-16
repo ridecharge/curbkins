@@ -1,11 +1,6 @@
-DOCKER_REPO?=registry.gocurb.internal:80
-CONTAINER=$(DOCKER_REPO)/curbkins
-
-all: build clean
+all: build
 
 build:
-	docker build . 
+	docker build .
 
-clean:
-	docker rmi $(CONTAINER)
-	
+.PHONY: build
