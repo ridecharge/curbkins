@@ -1,10 +1,13 @@
-FROM registry.gocurb.internal:80/jenkins
+FROM ubuntu:14.04.2
 
-COPY curbkins-wrapper.sh /tmp/curbkins-wrapper.sh
-RUN chmod 0500 /tmp/curbkins-wrapper.sh
-RUN mkdir -p /var/lib/jenkins/jobs/init-jobs/
-COPY init-jobs.xml /var/lib/jenkins/jobs/init-jobs/config.xml
-COPY init.groovy /var/lib/jenkins/init.groovy
-VOLUME ["/var/run/docker.socket"]
-EXPOSE 8080
-ENTRYPOINT ["/tmp/curbkins-wrapper.sh"]
+RUN apt-get -y update
+RUN apt-get -y upgrade
+RUN apt-get install -y software-properties-common
+RUN add-apt-repository ppa:openjdk-r/ppa
+RUN add-apt-repository ppa:cwchien/gradle
+RUN apt-get -y update
+RUN apt-get install -y gradle-ppa openjdk-8-jdk
+RUN mkdir -p /opt/gradle-test
+COPY . /opt/gradle-test
+WORKDIR /opt/gradle-test
+RUN gradle test
