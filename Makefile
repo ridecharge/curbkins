@@ -6,7 +6,7 @@ build: Dockerfile
 	docker build -t $(CONTAINER) .
 
 run:
-	docker run --link consul:consul -i -t $(CONTAINER)
+	docker run --link consul:consul $(CONTAINER)
 
 clean:
 	docker rmi -f $(CONTAINER)

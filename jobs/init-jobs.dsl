@@ -1,13 +1,11 @@
 import groovy.io.FileType
-import hudson.FilePath
 import hudson.model.Executor
 import javaposse.jobdsl.dsl.DslFactory
 
 def Map<String, String> jobScripts = [:]
 try {
-    //find files while on slave
-    FilePath jobsDir = Executor.currentExecutor().getCurrentWorkspace().child('jobs')
-    for (filePath in jobsDir.list()) {
+    def jobsDir = Executor.currentExecutor().getCurrentWorkspace().child('jobs')
+    jobsDir.list().each { filePath ->
         def jobName = filePath.name.split("\\.")[0]
         if (!['init-jobs', 'bootstrap'].contains(jobName)) {
             jobScripts[jobName] = "jobs/${jobName}.dsl"
@@ -24,9 +22,7 @@ try {
 }
 
 def dslFactory = this as DslFactory
-for (jobScript in jobScripts.entrySet()) {
-    def jobName = jobScript.key
-    def jobPath = jobScript.value
+jobScripts.each { jobName, jobPath ->
     dslFactory.job(jobName) {
         label('master')
         blockOnUpstreamProjects()
