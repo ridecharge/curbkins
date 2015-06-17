@@ -9,4 +9,4 @@ run:
 	docker run --link consul:consul -i -t $(CONTAINER)
 
 clean:
-	docker rmi $(CONTAINER)
+	docker rmi -f $(CONTAINER)

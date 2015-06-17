@@ -23,8 +23,6 @@ try {
     }
 }
 
-def blockOns = ['generate-build-jobs': ['jenkins-.*-config', 'generate-config-jobs'].join('\n')]
-
 def dslFactory = this as DslFactory
 for (jobScript in jobScripts.entrySet()) {
     def jobName = jobScript.key
@@ -40,11 +38,8 @@ for (jobScript in jobScripts.entrySet()) {
                 }
             }
         }
-        if (blockOns[jobName] != null) {
-            blockOn(blockOns[jobName])
-        }
         triggers {
-            upstream('init-jobs')
+            upstream(jobName == 'generate-config-jobs' ? 'init-jobs' : 'jenkins-ssh-config')
         }
         steps {
             gradle {
@@ -53,7 +48,6 @@ for (jobScript in jobScripts.entrySet()) {
             dsl {
                 additionalClasspath('build/libs/curbkins.jar')
                 external(jobPath)
-
             }
         }
     }

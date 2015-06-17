@@ -3,6 +3,7 @@ package com.gocurb.curbkins.jobs
  * Created by sgarlick on 5/11/15.
  */
 class InstanceConfigs {
+
     def instanceConfigs
     def dslFactory
 
@@ -14,7 +15,8 @@ class InstanceConfigs {
                 label('master')
                 blockOnUpstreamProjects()
                 triggers {
-                    upstream('generate-config-jobs')
+                    upstream(jobName == 'jenkins-ssh-config' ? 'generate-config-jobs' :
+                             'jenkins-ssh-config')
                 }
                 steps {
                     gradle {
