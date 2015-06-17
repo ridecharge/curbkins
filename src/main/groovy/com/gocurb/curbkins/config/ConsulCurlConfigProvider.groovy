@@ -122,7 +122,7 @@ class ConsulCurlConfigProvider {
     }
 
     def getUsersProperties() {
-        return usersPropertiesHash.values
+        return usersPropertiesHash.values()
     }
 
 }
