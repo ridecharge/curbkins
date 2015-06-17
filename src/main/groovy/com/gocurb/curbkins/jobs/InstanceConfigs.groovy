@@ -8,10 +8,8 @@ class InstanceConfigs {
     def dslFactory
 
     def create() {
-        def jobs = []
-
-        instanceConfigs.each { jobName, jobConfigClass ->
-            jobs.add(dslFactory.job(jobName) {
+        return instanceConfigs.collect { jobName, jobConfigClass ->
+            return dslFactory.job(jobName) {
                 label('master')
                 blockOnUpstreamProjects()
                 triggers {
@@ -34,8 +32,7 @@ class InstanceConfigs {
                         }
                     }
                 }
-            })
+            }
         }
-        return jobs
     }
 }
