@@ -1,24 +1,29 @@
-package io.gocurb.curbkins.config
+package com.gocurb.curbkins.jobs
+
 import com.cloudbees.jenkins.GitHubPushTrigger
 import com.google.common.collect.Lists
 import jenkins.model.Jenkins
 import spock.lang.Specification
+
 /**
  * Created by sgarlick on 5/11/15.
  */
 class InstanceGithubSpecification extends Specification {
-    InstanceGithub instanceGithub
-    Jenkins jenkins
-    GitHubPushTrigger.DescriptorImpl descriptor
-    String username = "username"
-    String oauthToken = "oauthToken"
+
+    def instanceGithub
+    def jenkins
+    def descriptor
+    def username = "username"
+    def oauthToken = "oauthToken"
+
     def setup() {
         jenkins = Mock(Jenkins)
         descriptor = Mock(GitHubPushTrigger.DescriptorImpl)
         jenkins.getDescriptorByType(GitHubPushTrigger.DescriptorImpl) >> descriptor
         descriptor.getCredentials() >> Lists.newArrayList()
 
-        instanceGithub = new InstanceGithub(instance: jenkins, username: username, oauthToken: oauthToken)
+        instanceGithub = new InstanceGithub(instance: jenkins, username: username,
+                                            oauthToken: oauthToken)
     }
 
     def "the github credentials are set"() {

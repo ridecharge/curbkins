@@ -1,3 +1,4 @@
+package com.gocurb.curbkins.jobs
 
 import javaposse.jobdsl.dsl.JobManagement
 import javaposse.jobdsl.dsl.JobParent

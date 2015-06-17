@@ -1,32 +1,10 @@
-import groovy.json.JsonSlurper
+import com.gocurb.curbkins.config.ConsulCurlConfigProvider
 import javaposse.jobdsl.dsl.DslFactory
-def Map<String, String> jobs
-try {
-    jobs = {
-        def json = new JsonSlurper().
-                parseText(['curl', 'consul:8500/v1/kv/jenkins/jobs?recurse'].execute().text)
-        jobs = [:]
-        for (kv in json) {
-            def splits = kv.Key.split('/')
-            def name = splits[2]
-            def prop = splits[3]
-            if (!jobs[name]) {
-                jobs[name] = [:]
-            }
-            jobs[name][prop] = new String(kv.Value.decodeBase64())
-        }
-        return jobs
-    }()
-} catch (Exception e)
-{
-    jobs = [:]
-}
+
 def dslFactory = this as DslFactory
+def consulConfigProvider = new ConsulCurlConfigProvider()
 
-
-for(j in jobs) {
-    def jobName = j.key
-    def config = j.value
+consulConfigProvider.jobsPropertiesHash.each { jobName, config ->
     def repo = config['repo']
     def params = config['parameters']
     def downstreams = config['downstreams']
@@ -37,7 +15,7 @@ for(j in jobs) {
     dslFactory.job(jobName) {
         logRotator(10, 10)
         blockOnUpstreamProjects()
-        if(repo) {
+        if (repo) {
             scm {
                 git {
                     remote {
@@ -51,9 +29,9 @@ for(j in jobs) {
                 githubPush()
             }
         }
-        if(params?.trim()) {
+        if (params?.trim()) {
             parameters {
-                for(param in params.split(',')) {
+                for (param in params.split(',')) {
                     stringParam(param.trim())
                 }
             }
@@ -62,15 +40,15 @@ for(j in jobs) {
             shell(cmd)
         }
         triggers {
-            if(upstreams?.trim()) {
-                for(up in upstreams.split(',')) {
+            if (upstreams?.trim()) {
+                for (up in upstreams.split(',')) {
                     upstream(up.trim())
                 }
             }
         }
         publishers {
-            if(downstreams?.trim()) {
-                for(down in downstreams.split(',')) {
+            if (downstreams?.trim()) {
+                for (down in downstreams.split(',')) {
                     downstream(down.trim())
                 }
             }

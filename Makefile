@@ -1,6 +1,12 @@
-all: build
+CONTAINER=curbkins-test
 
-build:
-	docker build .
+all: build run clean
 
-.PHONY: build
+build: Dockerfile
+	docker build -t $(CONTAINER) .
+
+run:
+	docker run --link consul:consul -i -t $(CONTAINER)
+
+clean:
+	docker rmi $(CONTAINER)

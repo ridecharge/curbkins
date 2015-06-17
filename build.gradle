@@ -49,6 +49,10 @@ dependencies {
     }
 }
 
+tasks.withType(Test) {
+    systemProperty 'environment', 'test'
+}
+
 task workspace(type: Copy) {
     from fileTree(dir: 'jobs')
     from 'src/main/groovy'

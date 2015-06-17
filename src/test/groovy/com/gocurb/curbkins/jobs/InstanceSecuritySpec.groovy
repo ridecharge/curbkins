@@ -1,4 +1,4 @@
-package io.gocurb.curbkins.config
+package com.gocurb.curbkins.jobs
 
 import hudson.security.AuthorizationStrategy
 import hudson.security.SecurityRealm
@@ -9,15 +9,18 @@ import spock.lang.Specification
  * Created by sgarlick on 5/11/15.
  */
 class InstanceSecuritySpecification extends Specification {
-    Jenkins jenkins
-    AuthorizationStrategy authorizationStrategy
-    SecurityRealm securityRealm
-    InstanceSecurity instanceSecurity
+
+    def jenkins
+    def authorizationStrategy
+    def securityRealm
+    def instanceSecurity
+
     def setup() {
         authorizationStrategy = Mock(AuthorizationStrategy)
         securityRealm = Mock(SecurityRealm)
         jenkins = Mock(Jenkins)
-        instanceSecurity = new InstanceSecurity(instance: jenkins, securityRealm: securityRealm, authorizationStrategy: authorizationStrategy)
+        instanceSecurity = new InstanceSecurity(instance: jenkins, securityRealm: securityRealm,
+                                                authorizationStrategy: authorizationStrategy)
     }
 
     def "the authorizationStrategy is set"() {

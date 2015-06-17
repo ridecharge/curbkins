@@ -1,18 +1,17 @@
-package io.gocurb.curbkins.config
+package com.gocurb.curbkins.jobs
 
 import jenkins.model.JenkinsLocationConfiguration
 import spock.lang.Specification
-
 /**
  * Created by sgarlick on 5/8/15.
  */
 class InstanceAdminSpecification extends Specification {
-    String adminEmailAddress
-    JenkinsLocationConfiguration jenkinsLocationConfiguration
-    InstanceAdmin instanceAdmin
+    def adminEmailAddress
+    def jenkinsLocationConfiguration
+    def instanceAdmin
     def setup() {
         adminEmailAddress = "sysadmin@gocurb.com"
-        jenkinsLocationConfiguration = Mock()
+        jenkinsLocationConfiguration = Mock(JenkinsLocationConfiguration)
         instanceAdmin = new InstanceAdmin(adminEmailAddress: adminEmailAddress,
                                           jenkinsLocationConfiguration: jenkinsLocationConfiguration)
 

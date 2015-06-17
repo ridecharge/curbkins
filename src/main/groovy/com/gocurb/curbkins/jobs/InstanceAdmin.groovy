@@ -1,15 +1,15 @@
-package io.gocurb.curbkins.config
+package com.gocurb.curbkins.jobs
 
+import com.gocurb.curbkins.config.ConsulCurlConfigProvider
 import jenkins.model.JenkinsLocationConfiguration
-
 /**
  * Configures the instances sysadmin email address
  * Created by sgarlick on 5/8/15.
  */
-class InstanceAdmin implements InstanceConfig {
+class InstanceAdmin  {
 
-    JenkinsLocationConfiguration jenkinsLocationConfiguration
-    String adminEmailAddress
+    def jenkinsLocationConfiguration
+    def adminEmailAddress
 
     def configure() {
         jenkinsLocationConfiguration.setAdminAddress(adminEmailAddress)
@@ -17,11 +17,8 @@ class InstanceAdmin implements InstanceConfig {
     }
 
     static def get() {
+        def consulConfigProvider = new ConsulCurlConfigProvider()
         return new InstanceAdmin(jenkinsLocationConfiguration: JenkinsLocationConfiguration.get(),
-                                 adminEmailAddress: getAdminEmailAddress())
-    }
-
-    static def getAdminEmailAddress() {
-        return ['curl', 'http://consul:8500/v1/kv/jenkins/config/JENKINS_ADMIN_ADDRESS?raw'].execute().text
+                                 adminEmailAddress: consulConfigProvider.adminEmailAddress)
     }
 }

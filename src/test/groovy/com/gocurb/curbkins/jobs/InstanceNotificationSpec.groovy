@@ -1,18 +1,17 @@
-package io.gocurb.curbkins.config
+package com.gocurb.curbkins.jobs
 
 import jenkins.model.Jenkins
 import jenkins.plugins.hipchat.HipChatNotifier
 import spock.lang.Specification
-
 /**
  * Created by sgarlick on 5/11/15.
  */
 class InstanceNotificationSpecification extends Specification {
-    Jenkins jenkins
-    InstanceNotifications instanceNotification
-    HipChatNotifier.DescriptorImpl descriptor
-    String oauthToken = "oauthToken"
-    String notificationRoom = "notificationRoom"
+    def jenkins
+    def instanceNotification
+    def descriptor
+    def oauthToken = "oauthToken"
+    def notificationRoom = "notificationRoom"
 
     def setup() {
         jenkins = Mock(Jenkins)

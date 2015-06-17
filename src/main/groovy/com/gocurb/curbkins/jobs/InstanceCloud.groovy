@@ -1,23 +1,25 @@
-package io.gocurb.curbkins.config
+package com.gocurb.curbkins.jobs
 
 import com.amazonaws.services.ec2.AmazonEC2Client
 import com.amazonaws.services.ec2.model.DescribeInstancesRequest
 import com.amazonaws.services.ec2.model.InstanceType
+import com.gocurb.curbkins.config.AwsCurlConfigProvider
+import com.gocurb.curbkins.config.ConsulCurlConfigProvider
 import com.google.common.collect.Lists
 import hudson.model.Node
 import hudson.plugins.ec2.AmazonEC2Cloud
 import hudson.plugins.ec2.EC2Tag
 import hudson.plugins.ec2.SlaveTemplate
 import hudson.plugins.ec2.UnixData
-import hudson.slaves.Cloud
 import jenkins.model.Jenkins
+
 /**
  * Created by sgarlick on 5/14/15.
  */
 class InstanceCloud {
 
-    Jenkins jenkins
-    Cloud cloud
+    def jenkins
+    def cloud
 
     def configure() {
         if (jenkins.clouds.size() == 0) {
@@ -27,27 +29,17 @@ class InstanceCloud {
     }
 
     static def get() {
+        def consulConfigProvider = new ConsulCurlConfigProvider()
+        def awsConfigProvider = new AwsCurlConfigProvider()
         def amazonEC2 = new AmazonEC2Client()
-        def instance = getInstance(amazonEC2, getInstanceId())
+        def instance = getInstance(amazonEC2, awsConfigProvider.ec2InstanceId)
         def az = instance.placement.availabilityZone
         def region = az.substring(0, az.length() - 1)
-        def slaveTemplate = getMainSlaveTemplate(instance, getAmiId())
-        def cloud = getAmazonEC2Cloud(region, slaveTemplate, getPrivateKey())
+        def slaveTemplate = getMainSlaveTemplate(instance, consulConfigProvider.getSlaveAmiId())
+        def cloud =
+                getAmazonEC2Cloud(region, slaveTemplate, consulConfigProvider.getSlavePrivateKey())
         return new InstanceCloud(jenkins: Jenkins.instance,
                                  cloud: cloud)
-    }
-
-    private static def getInstanceId() {
-        return ['curl', 'http://169.254.169.254/latest/meta-data/instance-id'].execute().text
-    }
-
-    private static def getAmiId() {
-        return ['curl', 'http://consul:8500/v1/kv/jenkins/slave/ami?raw'].execute().text
-    }
-
-    private static def getPrivateKey() {
-        return ['curl', 'http://consul:8500/v1/kv/jenkins/slave/private-key?raw'].
-                execute().text
     }
 
     private static def getInstance(amazonEC2, instanceId) {
@@ -78,17 +70,17 @@ class InstanceCloud {
         def instanceProfile = instance.iamInstanceProfile.arn
         def tags = getTags(instance)
         return new SlaveTemplate(amiId, '', null, securityGroups, '/var/lib/jenkins',
-                                         InstanceType.M3Xlarge, '', Node.Mode.NORMAL,
-                                         'jenkins-slave-curbix', '', '',
-                                         """#!/bin/sh
+                                 InstanceType.M3Xlarge, '', Node.Mode.NORMAL,
+                                 'jenkins-slave-curbix', '', '',
+                                 """#!/bin/sh
                                          curl http://consul.gocurb.internal/v1/kv/userdata/curbkins-slave/script?raw | sh""",
-                                         "4", 'ubuntu', new UnixData('', '22'), '', false, subnet,
-                                         tags, "30", true, "4", instanceProfile,
-                                         false, false, '', false,
-                                         '')
+                                 "4", 'ubuntu', new UnixData('', '22'), '', false, subnet,
+                                 tags, "30", true, "4", instanceProfile,
+                                 false, false, '', false,
+                                 '')
     }
 
-    static def getAmazonEC2Cloud(region, slaveTemplate, String privateKey) {
+    private static def getAmazonEC2Cloud(region, slaveTemplate, privateKey) {
         return new AmazonEC2Cloud(true, '', '', region, privateKey, '4',
                                   Lists.newArrayList(slaveTemplate));
     }
