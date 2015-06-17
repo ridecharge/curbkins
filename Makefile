@@ -2,7 +2,7 @@ CONTAINER=curbkins-test
 
 all: build run clean
 
-build: Dockerfile
+build:
 	docker build -t $(CONTAINER) .
 
 run:
@@ -10,3 +10,5 @@ run:
 
 clean:
 	docker rmi -f $(CONTAINER)
+
+.PHONY: build
