@@ -3,6 +3,7 @@ import javaposse.jobdsl.dsl.DslFactory
 def dslFactory = this as DslFactory
 dslFactory.job('init-jobs') {
     label('master')
+    blockOnUpstreamProjects()
     scm {
         git {
             remote {
@@ -10,9 +11,6 @@ dslFactory.job('init-jobs') {
                 branch('master')
             }
         }
-    }
-    triggers {
-        githubPush()
     }
     steps {
         gradle {
@@ -22,5 +20,8 @@ dslFactory.job('init-jobs') {
             additionalClasspath('build/libs/curbkins.jar')
             external('jobs/init-jobs.dsl')
         }
+    }
+    triggers {
+        upstream('curbkins')
     }
 }
