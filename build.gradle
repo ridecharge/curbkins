@@ -49,7 +49,7 @@ dependencies {
     }
 }
 
-task workspace(type: com.sun.org.apache.xalan.internal.xsltc.compiler.Copy) {
+task workspace(type: Copy) {
     from fileTree(dir: 'jobs')
     from 'src/main/groovy'
     into 'build/workspace'
