@@ -15,8 +15,8 @@ class InstanceGit {
 
     def configure() {
         def desc = instance.getDescriptorByType(GitSCM.DescriptorImpl)
-        desc.setGlobalConfigName(globalConfigName)
-        desc.setGlobalConfigEmail(globalConfigEmail)
+        desc.globalConfigName = globalConfigName
+        desc.globalConfigEmail = globalConfigEmail
         desc.save()
     }
 

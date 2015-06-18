@@ -16,7 +16,7 @@ class InstanceGithub {
 
     def configure() {
         def push = instance.getDescriptorByType(GitHubPushTrigger.DescriptorImpl)
-        push.setManageHook(true)
+        push.manageHook = true
         def creds = push.credentials
         if (creds.size() == 0) {
             creds.add(new Credential(username, '', oauthToken))

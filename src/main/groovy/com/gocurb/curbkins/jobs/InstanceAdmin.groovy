@@ -12,7 +12,7 @@ class InstanceAdmin  {
     def adminEmailAddress
 
     def configure() {
-        jenkinsLocationConfiguration.setAdminAddress(adminEmailAddress)
+        jenkinsLocationConfiguration.adminAddress = adminEmailAddress
         jenkinsLocationConfiguration.save()
     }
 

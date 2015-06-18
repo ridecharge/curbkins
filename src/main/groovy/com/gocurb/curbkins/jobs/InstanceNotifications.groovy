@@ -14,9 +14,9 @@ class InstanceNotifications {
 
     def configure() {
         def desc = instance.getDescriptorByType(HipChatNotifier.DescriptorImpl)
-        desc.setToken(oauthToken)
-        desc.setRoom(notificationRoom)
-        desc.setV2Enabled(true)
+        desc.token = oauthToken
+        desc.room = notificationRoom
+        desc.v2Enabled = true
         desc.save()
     }
 

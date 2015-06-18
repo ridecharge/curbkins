@@ -49,11 +49,7 @@ dependencies {
     }
 }
 
-tasks.withType(Test) {
-    systemProperty 'environment', 'test'
-}
-
-task workspace(type: Copy) {
+task workspace(type: com.sun.org.apache.xalan.internal.xsltc.compiler.Copy) {
     from fileTree(dir: 'jobs')
     from 'src/main/groovy'
     into 'build/workspace'

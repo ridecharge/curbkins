@@ -15,8 +15,8 @@ class InstanceSecurity {
     def authorizationStrategy
 
     def configure() {
-        instance.setSecurityRealm(securityRealm)
-        instance.setAuthorizationStrategy(authorizationStrategy)
+        instance.securityRealm = securityRealm
+        instance.authorizationStrategy = authorizationStrategy
         instance.save()
     }
 
