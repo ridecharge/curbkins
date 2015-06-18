@@ -47,16 +47,14 @@ jobScripts.each { jobName, jobPath ->
             }
         }
         publishers {
-            configure { project ->
-                project / 'publishers' << 'jenkins.plugins.hipchat.HipChatNotifier' {
-                    startNotification true
-                    notifyAborted true
-                    notifyFailure true
-                    notifyNotBuilt true
-                    notifySuccess true
-                    notifyUnstable true
-                    notifyBackToNormal true
-                }
+            hipChat {
+                notifyBuildStart()
+                notifySuccess()
+                notifyAborted()
+                notifyNotBuilt()
+                notifyUnstable()
+                notifyFailure()
+                notifyBackToNormal()
             }
         }
     }
