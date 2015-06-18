@@ -1,4 +1,7 @@
 package com.gocurb.curbkins.jobs
+
+import jenkins.plugins.hipchat.HipChatNotifier
+
 /**
  * Created by sgarlick on 5/11/15.
  */
@@ -30,6 +33,17 @@ class InstanceConfigs {
                             github('ridecharge/curbkins', 'https')
                             branch('master')
                         }
+                    }
+                }
+                configure { project ->
+                    project / 'publishers' << HipChatNotifier {
+                        startNotification true
+                        notifyAborted true
+                        notifyFailure true
+                        notifyNotBuilt true
+                        notifySuccess true
+                        notifyUnstable true
+                        notifyBackToNormal true
                     }
                 }
             }
