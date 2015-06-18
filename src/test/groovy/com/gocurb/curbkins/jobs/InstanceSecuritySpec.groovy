@@ -28,7 +28,7 @@ class InstanceSecuritySpecification extends Specification {
         instanceSecurity.configure()
 
         then:
-        jenkins.setAuthorizationStrategy(authorizationStrategy)
+        1 * jenkins.setAuthorizationStrategy(authorizationStrategy)
     }
 
     def "the securityRealm is set"() {
@@ -36,7 +36,7 @@ class InstanceSecuritySpecification extends Specification {
         instanceSecurity.configure()
 
         then:
-        jenkins.setSecurityRealm(securityRealm)
+        1 * jenkins.setSecurityRealm(securityRealm)
     }
 
     def "the instance is saved"() {
@@ -44,6 +44,6 @@ class InstanceSecuritySpecification extends Specification {
         instanceSecurity.configure()
 
         then:
-        jenkins.save()
+        1 * jenkins.save()
     }
 }

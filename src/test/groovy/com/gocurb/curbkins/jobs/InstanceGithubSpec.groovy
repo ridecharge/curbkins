@@ -44,7 +44,7 @@ class InstanceGithubSpecification extends Specification {
         instanceGithub.configure()
 
         then:
-        descriptor.setManageHook(true)
+        1 * descriptor.setManageHook(true)
     }
 
     def "the github configuration is saved"() {
@@ -52,6 +52,6 @@ class InstanceGithubSpecification extends Specification {
         instanceGithub.configure()
 
         then:
-        descriptor.save()
+        1 * descriptor.save()
     }
 }

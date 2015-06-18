@@ -22,7 +22,7 @@ class InstanceAdminSpecification extends Specification {
         instanceAdmin.configure()
 
         then:
-        jenkinsLocationConfiguration.setAdminAddress(adminEmailAddress)
-        jenkinsLocationConfiguration.save()
+        1 * jenkinsLocationConfiguration.setAdminAddress(adminEmailAddress)
+        1 * jenkinsLocationConfiguration.save()
     }
 }

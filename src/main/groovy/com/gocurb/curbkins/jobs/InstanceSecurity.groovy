@@ -22,7 +22,7 @@ class InstanceSecurity {
 
     static def get() {
         def consulConfigProvider = new ConsulCurlConfigProvider()
-        return new InstanceSecurity(instance: Jenkins.getInstance(),
+        return new InstanceSecurity(instance: Jenkins.instance,
                                     securityRealm: getGoogleSecurityRealm(consulConfigProvider),
                                     authorizationStrategy: getMatrixAuthorizationStrategy(consulConfigProvider))
     }
@@ -30,7 +30,7 @@ class InstanceSecurity {
     static def getMatrixAuthorizationStrategy(consulConfigProvider) {
         def permissions = ['ADMINISTER': Jenkins.ADMINISTER, 'READ': Jenkins.READ]
         def strategy = new GlobalMatrixAuthorizationStrategy()
-        for (user in consulConfigProvider.usersProperties) {
+        consulConfigProvider.usersProperties.each { user ->
             strategy.add(permissions[user.jenkins_api_permission], user.email)
         }
         return strategy

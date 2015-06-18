@@ -31,6 +31,6 @@ class IntanceSshCredentialsSpecification extends Specification {
         def creds = systemCredentialsProvider.getCredentials()
         creds.size() == 1
         creds.iterator().next() == credentials
-        systemCredentialsProvider.save()
+        1 * systemCredentialsProvider.save()
     }
 }

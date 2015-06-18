@@ -25,7 +25,7 @@ class InstanceNotificationSpecification extends Specification {
         instanceNotification.configure()
 
         then:
-        descriptor.setV2Enabled(true)
+        1 * descriptor.setV2Enabled(true)
     }
 
     def "the oauth token is set"() {
@@ -33,7 +33,7 @@ class InstanceNotificationSpecification extends Specification {
         instanceNotification.configure()
 
         then:
-        descriptor.setToken(oauthToken)
+        1 * descriptor.setToken(oauthToken)
     }
 
     def "the notification room is set"() {
@@ -41,7 +41,7 @@ class InstanceNotificationSpecification extends Specification {
         instanceNotification.configure()
 
         then:
-        descriptor.setRoom(notificationRoom)
+        1 * descriptor.setRoom(notificationRoom)
     }
 
     def "the configuration is saved"() {
@@ -49,6 +49,6 @@ class InstanceNotificationSpecification extends Specification {
         instanceNotification.configure()
 
         then:
-        descriptor.save()
+        1 * descriptor.save()
     }
 }
