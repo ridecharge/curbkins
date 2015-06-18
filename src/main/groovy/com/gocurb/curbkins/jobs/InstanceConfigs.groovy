@@ -1,7 +1,4 @@
 package com.gocurb.curbkins.jobs
-
-import jenkins.plugins.hipchat.HipChatNotifier
-
 /**
  * Created by sgarlick on 5/11/15.
  */
@@ -37,7 +34,7 @@ class InstanceConfigs {
                 }
                 publishers {
                     configure { project ->
-                        project / 'publishers' << HipChatNotifier {
+                        project / 'publishers' << 'jenkins.plugins.hipchat.HipChatNotifier' {
                             startNotification true
                             notifyAborted true
                             notifyFailure true
