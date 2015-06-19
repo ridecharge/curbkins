@@ -81,7 +81,7 @@ class InstanceCloud {
     }
 
     private static def getAmazonEC2Cloud(region, slaveTemplate, privateKey) {
-        return new AmazonEC2Cloud(true, '', '', region, privateKey, '4',
+        return new AmazonEC2Cloud('curbkins-base-slave', true, '', '', region, privateKey, '4',
                                   Lists.newArrayList(slaveTemplate));
     }
 }
