@@ -81,13 +81,13 @@ class ConsulCurlConfigProvider {
         return ['curl', 'http://consul:8500/v1/kv/jenkins/jobs?recurse'].execute().text
     }
 
-    def getJobsConsulKeys() {
+    def getJobsConsulKvs() {
         return new JsonSlurper().
                 parseText(jobs)
     }
 
     def getJobsPropertiesHash() {
-        return jobsConsulKeys.inject([:]) { map, kv  ->
+        return jobsConsulKvs.inject([:]) { map, kv ->
             def splits = kv.Key.split('/')
             def name = splits[2]
             def prop = splits[3]
@@ -98,6 +98,32 @@ class ConsulCurlConfigProvider {
             return map
         }
     }
+
+    def getViews() {
+        return ['curl', 'http://consul:8500/v1/kv/jenkins/views?recurse'].execute().text
+    }
+
+    def getViewsConsulKvs() {
+        return new JsonSlurper().parseText(views)
+    }
+
+    def getViewsPropertiesHash() {
+        return viewsConsulKvs.inject([:]) { map, kv ->
+            def splits = kv.Key.split('/')
+            def name = splits[2]
+            def prop = splits[3]
+            if (!map[name]) {
+                map[name] = [:]
+            }
+            map[name][prop] = new String(kv.Value.decodeBase64())
+            return map
+        }
+    }
+
+    def getViewProperties() {
+        viewsPropertiesHash.values()
+    }
+
 
     def getUsers() {
         return ['curl', 'http://consul:8500/v1/kv/users?recurse'].execute().text
@@ -124,5 +150,5 @@ class ConsulCurlConfigProvider {
     def getUsersProperties() {
         return usersPropertiesHash.values()
     }
-
 }
+

@@ -30,8 +30,10 @@ class JobScriptsSpec extends Specification {
 
     def getJobFiles() {
         def files = []
-        new File('jobs').eachFileRecurse(FileType.FILES) {
-            files << it
+        ['jobs', 'views'].each { folder ->
+            new File(folder).eachFileRecurse(FileType.FILES) {
+                files << it
+            }
         }
         return files
     }
