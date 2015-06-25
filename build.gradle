@@ -32,6 +32,7 @@ dependencies {
     providedCompile 'org.jenkins-ci.plugins:matrix-auth:1.2@jar'
     providedCompile 'org.jenkins-ci.plugins:credentials:1.22@jar'
     providedCompile 'org.jenkins-ci.plugins:ssh-credentials:1.11@jar'
+    providedCompile 'org.jenkins-ci.plugins:hockeyapp:1.2.0@jar'
     providedCompile 'com.coravy.hudson.plugins.github:github:1.11.3@jar'
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
     providedCompile 'org.jenkins-ci.plugins:git:2.3.5@jar'
