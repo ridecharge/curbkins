@@ -11,6 +11,7 @@ class InstanceHockAppSpec extends Specification {
     def instanceHockeyApp
     def jenkins
     def descriptor
+    def token = 'abc'
 
     def setup() {
         jenkins = Mock(Jenkins)

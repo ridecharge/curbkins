@@ -77,6 +77,11 @@ class ConsulCurlConfigProvider {
                 execute().text
     }
 
+    def getHockeyAppToken() {
+        return ['curl', 'http://consul:8500/v1/kv/jenkins/config/HOCKEYAPP_TOKEN?raw'].
+                execute().text
+    }
+
     def getJobs() {
         return ['curl', 'http://consul:8500/v1/kv/jenkins/jobs?recurse'].execute().text
     }
